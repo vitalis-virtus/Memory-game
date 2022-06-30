@@ -15,6 +15,14 @@ const state = {
   loop: null,
 };
 
+const createNumberArray = (lowerNumber, higherNumber) => {
+  const initialArray = [];
+  for (let i = lowerNumber; i <= higherNumber; i++) {
+    initialArray.push(i);
+  }
+  return initialArray;
+};
+
 // const emojis = ["🥔", "🍒", "🥑", "🌽", "🥕", "🍇", "🍉", "🍌", "🥭", "🍍"];
 
 const pickRandom = (array, items) => {
@@ -58,9 +66,11 @@ const generateGame = () => {
     throw new Error("The dimesion of the board must be an even number");
   }
 
-  const emojis = ["🥔", "🍒", "🥑", "🌽", "🥕", "🍇", "🍉", "🍌", "🥭", "🍍"];
+  // const emojis = ["🥔", "🍒", "🥑", "🌽", "🥕", "🍇", "🍉", "🍌", "🥭", "🍍"];
 
-  const picks = pickRandom(emojis, (dimensions * dimensions) / 2);
+  const numbers = createNumberArray(1, 50);
+
+  const picks = pickRandom(numbers, (dimensions * dimensions) / 2);
   const items = shuffle([...picks, ...picks]);
 
   const cards = `
@@ -79,8 +89,9 @@ const generateGame = () => {
        </div>
     `;
 
-  selectors.boardContainer.innerHTML = cards;
-  selectors.boardContainer.classList.remove("flipped");
+  const parser = new DOMParser().parseFromString(cards, "text/html");
+
+  selectors.board.replaceWith(parser.querySelector(".board"));
 };
 
 //функція, яка запускає відлік часу при початку гри
@@ -170,5 +181,5 @@ const attachEventListeners = () => {
   });
 };
 
-// generateGame();
+generateGame();
 attachEventListeners();
